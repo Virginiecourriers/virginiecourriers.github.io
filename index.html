@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- ======================================================
+       TITRE & DESCRIPTION DU SITE (apparaissent dans Google / l'onglet)
+       ====================================================== -->
+  <title>Virginie Courriers — Agence créative</title>
+  <meta name="description" content="Virginie Courriers: assistance juridique">
+
+  <!-- Police Google Fonts (tu peux la changer ici) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <!-- Icônes Font Awesome (réseaux sociaux, services...) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+/* ==========================================================
+   1. VARIABLES GLOBALES — MODIFIE ICI LES COULEURS DU SITE
+   ========================================================== */
+:root {
+  --couleur-fond: #4a5568;        /* Fond principal : gris-bleu ardoise moyen */
+  --couleur-fond-2: #566179;      /* Fond secondaire : un ton plus clair (cartes, sections alternées) */
+  --couleur-texte: #f4f6fa;       /* Texte principal : blanc cassé */
+  --couleur-texte-2: #cdd5e2;     /* Texte secondaire : gris-bleu clair */
+  --couleur-primaire: #8fb8e0;    /* Couleur principale : bleu ciel doux */
+  --couleur-secondaire: #b4a7d6;  /* Couleur secondaire : lavande pastel */
+  --couleur-accent: #e8cf9f;      /* Accent : sable clair */
+  --degrade: linear-gradient(135deg, var(--couleur-primaire), var(--couleur-secondaire));
+  --rayon: 18px;
+  --transition: 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+/* ==========================================================
+   2. RESET & BASE
+   ========================================================== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; } /* Défilement fluide quand on clique sur un lien du menu */
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--couleur-fond);
+  color: var(--couleur-texte);
+  line-height: 1.6;
+  overflow-x: hidden; /* Évite le scroll horizontal dû aux animations */
+}
+
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; display: block; }
+
+/* Conteneur qui centre le contenu */
+.conteneur { width: min(1200px, 90%); margin: 0 auto; }
+
+/* Titre de section avec dégradé */
+.titre-section {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  margin-bottom: 1rem;
+  background: var(--degrade);
+  -webkit-background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text;   /* Le dégradé s'applique au texte */
+  -webkit-text-fill-color: transparent;
+}
+.sous-titre-section { color: var(--couleur-texte-2); max-width: 600px; margin-bottom: 3rem; }
+
+section { padding: 120px 0; position: relative; }
+
+/* ==========================================================
+   3. ANIMATION DE BACKGROUND (blobs flous qui flottent)
+   ========================================================== */
+.fond-anime {
+  position: fixed; inset: 0; z-index: -1; overflow: hidden;
+}
+.blob {
+  position: absolute;
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  filter: blur(120px);     /* Flou pour un effet "lumière"  */
+  opacity: 0.35;
+  animation: flotter 18s ease-in-out infinite alternate;
+}
+/* Chaque blob a sa couleur, sa position et un délai différent */
+.blob-1 { background: var(--couleur-primaire); top: -150px; left: -100px; }
+.blob-2 { background: var(--couleur-secondaire); bottom: -150px; right: -100px; animation-delay: -6s; }
+.blob-3 { background: var(--couleur-accent); top: 40%; left: 40%; width: 350px; height: 350px; animation-delay: -12s; }
+
+@keyframes flotter {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(80px, -60px) scale(1.15); }
+  100% { transform: translate(-60px, 80px) scale(0.95); }
+}
+
+/* Grille subtile en arrière-plan (optionnelle : supprime .grille si tu n'en veux pas) */
+.grille {
+  position: fixed; inset: 0; z-index: -1;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+}
+
+/* ==========================================================
+   4. BARRE DE PROGRESSION DU SCROLL (en haut de la page)
+   ========================================================== */
+#barre-progression {
+  position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+  background: var(--degrade); z-index: 1001;
+  transition: width 0.1s linear;
+}
+
+/* ==========================================================
+   5. NAVIGATION (header)
+   ========================================================== */
+header {
+  position: fixed; top: 0; width: 100%; z-index: 1000;
+  padding: 20px 0;
+  transition: var(--transition);
+}
+/* Classe ajoutée par JS quand on scroll : fond semi-transparent + flou */
+header.scrolle {
+  padding: 12px 0;
+  background: rgba(11, 15, 25, 0.7);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+nav { display: flex; align-items: center; justify-content: space-between; }
+
+.logo { font-weight: 800; font-size: 1.4rem; }
+.logo span { background: var(--degrade); -webkit-background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+.menu { display: flex; gap: 32px; list-style: none; }
+.menu a { position: relative; font-weight: 600; color: var(--couleur-texte-2); transition: color 0.3s; }
+.menu a:hover { color: var(--couleur-texte); }
+/* Soulignement animé qui apparaît au survol */
+.menu a::after {
+  content: ''; position: absolute; left: 0; bottom: -6px;
+  width: 0; height: 2px; background: var(--degrade);
+  transition: width var(--transition);
+}
+.menu a:hover::after { width: 100%; }
+
+/* Bouton burger (mobile) */
+.burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
+.burger span { width: 26px; height: 2px; background: var(--couleur-texte); transition: var(--transition); }
+.burger.actif span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.burger.actif span:nth-child(2) { opacity: 0; }
+.burger.actif span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ==========================================================
+   6. BOUTONS (avec bordure animée au survol)
+   ========================================================== */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 32px; border-radius: 50px;
+  font-weight: 600; cursor: pointer; border: none;
+  position: relative; overflow: hidden;
+  transition: var(--transition);
+}
+/* Bouton principal avec dégradé + effet brillance */
+.btn-primaire { background: var(--degrade); color: #fff; box-shadow: 0 10px 30px rgba(108, 99, 255, 0.35); }
+.btn-primaire::before {
+  /* Reflet qui traverse le bouton au survol */
+  content: ''; position: absolute; top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+  transition: left 0.6s;
+}
+.btn-primaire:hover::before { left: 100%; }
+.btn-primaire:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(108, 99, 255, 0.5); }
+
+/* Bouton secondaire : bordure en dégradé animé */
+.btn-contour {
+  background: var(--couleur-fond); color: var(--couleur-texte);
+  border: 2px solid transparent;
+  background-image: linear-gradient(var(--couleur-fond), var(--couleur-fond)), var(--degrade);
+  background-origin: border-box; background-clip: padding-box, border-box;
+}
+.btn-contour:hover { transform: translateY(-3px); color: var(--couleur-secondaire); }
+
+/* ==========================================================
+   7. SECTION HERO (accueil)
+   ========================================================== */
+.hero {
+  min-height: 100vh; display: flex; align-items: center;
+  padding-top: 80px;
+}
+.hero-contenu { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center; }
+
+.badge {
+  display: inline-block; padding: 6px 16px; border-radius: 50px;
+  font-size: 0.85rem; font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.05);
+  margin-bottom: 24px;
+}
+.badge::before { content: '●'; color: #27f171; margin-right: 8px; animation: pulser 1.5s infinite; }
+@keyframes pulser { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+.hero h1 { font-size: clamp(2.6rem, 6vw, 4.5rem); line-height: 1.1; font-weight: 800; margin-bottom: 24px; }
+.hero h1 span { background: var(--degrade); -webkit-background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.hero p { color: var(--couleur-texte-2); font-size: 1.15rem; margin-bottom: 36px; max-width: 520px; }
+.hero-boutons { display: flex; gap: 16px; flex-wrap: wrap; }
+
+/* Image du hero avec effet flottant + halo */
+.hero-image { position: relative; }
+.hero-image img {
+  border-radius: var(--rayon);
+  animation: leviter 6s ease-in-out infinite;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+}
+.hero-image::before {
+  /* Halo lumineux derrière l'image */
+  content: ''; position: absolute; inset: -20px;
+  background: var(--degrade); filter: blur(60px); opacity: 0.4; z-index: -1;
+  border-radius: 50%;
+}
+@keyframes leviter { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-18px); } }
+
+/* ==========================================================
+   8. SECTION SERVICES (cartes avec bordure animée)
+   ========================================================== */
+.grille-cartes { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; }
+
+.carte {
+  position: relative;
+  background: var(--couleur-fond-2);
+  border-radius: var(--rayon);
+  padding: 40px 32px;
+  transition: var(--transition);
+  overflow: hidden;
+}
+/* Bordure en dégradé qui tourne autour de la carte au survol */
+.carte::before {
+  content: ''; position: absolute; inset: 0;
+  border-radius: var(--rayon); padding: 1.5px;
+  background: conic-gradient(from var(--angle, 0deg), var(--couleur-primaire), var(--couleur-secondaire), var(--couleur-accent), var(--couleur-primaire));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.3; transition: opacity 0.4s;
+}
+
+.carte:hover::before { opacity: 1; animation: tourner 3s linear infinite; }
+.carte:hover { transform: translateY(-10px); box-shadow: 0 25px 50px rgba(0,0,0,0.4); }
+
+/* Propriété custom pour animer l'angle du conic-gradient */
+@property --angle { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+@keyframes tourner { to { --angle: 360deg; } }
+
+.carte .icone {
+  width: 60px; height: 60px; border-radius: 14px;
+  display: grid; place-items: center; font-size: 1.5rem;
+  background: var(--degrade); margin-bottom: 24px;
+  transition: var(--transition);
+}
+.carte:hover .icone { transform: rotate(-8deg) scale(1.1); }
+.carte h3 { font-size: 1.3rem; margin-bottom: 12px; }
+.carte p { color: var(--couleur-texte-2); }
+
+/* ==========================================================
+   9. SECTION PORTFOLIO (galerie d'images avec zoom)
+   ========================================================== */
+.galerie { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+.projet {
+  position: relative; border-radius: var(--rayon); overflow: hidden;
+  aspect-ratio: 4/3; cursor: pointer;
+}
+.projet img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s cubic-bezier(0.22,1,0.36,1); }
+.projet:hover img { transform: scale(1.1); }
+/* Overlay qui apparaît au survol */
+.projet-info {
+  position: absolute; inset: 0; padding: 28px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  background: linear-gradient(to top, rgba(11,15,25,0.95), transparent 60%);
+  opacity: 0; transform: translateY(20px); transition: var(--transition);
+}
+.projet:hover .projet-info { opacity: 1; transform: translateY(0); }
+.projet-info span { color: var(--couleur-secondaire); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+.projet-info h3 { font-size: 1.3rem; }
+
+/* ==========================================================
+   10. SECTION À PROPOS + STATISTIQUES (chiffres animés)
+   ========================================================== */
+.apropos { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.apropos img { border-radius: var(--rayon); }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
+.stat { text-align: center; padding: 20px; border-radius: var(--rayon); background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); }
+.stat .nombre { font-size: 2.4rem; font-weight: 800; background: var(--degrade); -webkit-background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.stat p { color: var(--couleur-texte-2); font-size: 0.9rem; }
+
+/* ==========================================================
+   11. SECTION CONTACT (formulaire)
+   ========================================================== */
+.contact { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+.formulaire { display: flex; flex-direction: column; gap: 18px; }
+.formulaire input, .formulaire textarea {
+  width: 100%; padding: 16px 20px; border-radius: 12px;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  color: var(--couleur-texte); font-family: inherit; font-size: 1rem;
+  transition: var(--transition);
+}
+.formulaire input:focus, .formulaire textarea:focus {
+  outline: none; border-color: var(--couleur-primaire);
+  box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.2);
+}
+.formulaire textarea { min-height: 150px; resize: vertical; }
+
+.infos-contact p { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; color: var(--couleur-texte-2); }
+.infos-contact i { color: var(--couleur-secondaire); font-size: 1.2rem; width: 24px; }
+
+/* ==========================================================
+   12. RÉSEAUX SOCIAUX (icônes avec effet au survol)
+   ========================================================== */
+.reseaux { display: flex; gap: 14px; margin-top: 30px; }
+.reseaux a {
+  width: 46px; height: 46px; border-radius: 50%;
+  display: grid; place-items: center;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+  transition: var(--transition);
+}
+.reseaux a:hover {
+  background: var(--degrade); border-color: transparent;
+  transform: translateY(-5px) rotate(8deg);
+  box-shadow: 0 10px 25px rgba(108,99,255,0.4);
+}
+
+/* ==========================================================
+   13. FOOTER
+   ========================================================== */
+footer {
+  padding: 50px 0; text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  color: var(--couleur-texte-2); font-size: 0.9rem;
+}
+footer .reseaux { justify-content: center; margin: 0 0 24px; }
+
+/* ==========================================================
+   14. ANIMATIONS AU SCROLL (reveal)
+   Les éléments avec .reveal sont invisibles au départ,
+   puis deviennent visibles quand on scroll jusqu'à eux (voir JS).
+   ========================================================== */
+.reveal {
+  opacity: 0; transform: translateY(50px);
+  transition: opacity 0.9s var(--transition), transform 0.9s var(--transition);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+/* Variantes : depuis la gauche / droite / zoom */
+.reveal-gauche { transform: translateX(-60px); }
+.reveal-droite { transform: translateX(60px); }
+.reveal-zoom { transform: scale(0.85); }
+.reveal-gauche.visible, .reveal-droite.visible, .reveal-zoom.visible { transform: none; }
+/* Délais en cascade (pour les cartes) */
+.delai-1 { transition-delay: 0.1s; }
+.delai-2 { transition-delay: 0.2s; }
+.delai-3 { transition-delay: 0.3s; }
+
+/* ==========================================================
+   15. BOUTON "RETOUR EN HAUT"
+   ========================================================== */
+#retour-haut {
+  position: fixed; bottom: 30px; right: 30px;
+  width: 50px; height: 50px; border-radius: 50%;
+  background: var(--degrade); color: #fff; border: none;
+  display: grid; place-items: center; cursor: pointer;
+  opacity: 0; transform: translateY(20px); transition: var(--transition);
+  box-shadow: 0 10px 25px rgba(108,99,255,0.4); z-index: 999;
+}
+#retour-haut.visible { opacity: 1; transform: translateY(0); }
+
+/* ==========================================================
+   16. CURSEUR PERSONNALISÉ (désactivé sur mobile)
+   ========================================================== */
+.curseur {
+  position: fixed; width: 20px; height: 20px; border-radius: 50%;
+  border: 2px solid var(--couleur-secondaire); pointer-events: none;
+  transform: translate(-50%, -50%); z-index: 9999;
+  transition: width 0.2s, height 0.2s, background 0.2s;
+}
+.curseur.grand { width: 50px; height: 50px; background: rgba(0,212,255,0.15); }
+
+/* ==========================================================
+   17. RESPONSIVE (mobile / tablette)
+   ========================================================== */
+@media (max-width: 900px) {
+  .hero-contenu, .apropos, .contact { grid-template-columns: 1fr; }
+  .hero-image { order: -1; max-width: 400px; margin: 0 auto; }
+  .stats { grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .curseur { display: none; } /* Pas de curseur custom sur tactile */
+
+  /* Menu mobile : panneau latéral */
+  .burger { display: flex; }
+  .menu {
+    position: fixed; top: 0; right: -100%; height: 100vh; width: 70%;
+    background: var(--couleur-fond-2); flex-direction: column;
+    padding: 100px 40px; gap: 28px; transition: right var(--transition);
+    box-shadow: -10px 0 40px rgba(0,0,0,0.5);
+  }
+  .menu.ouvert { right: 0; }
+}
+@media (max-width: 500px) {
+  section { padding: 80px 0; }
+  .stats { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Fond animé (blobs + grille) -->
+<div class="fond-anime">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+<div class="grille"></div>
+
+<!-- Barre de progression du scroll -->
+<div id="barre-progression"></div>
+
+<!-- Curseur personnalisé -->
+<div class="curseur"></div>
+
+<!-- ==========================================================
+     HEADER / NAVIGATION — modifie les liens et le logo ici
+     ========================================================== -->
+<header>
+  <nav class="conteneur">
+    <a href="#accueil" class="logo">Virginie<span>Courriers</span></a>
+
+    <ul class="menu">
+      <li><a href="#accueil">Accueil</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#portfolio">Portfolio</a></li>
+      <li><a href="#apropos">À propos</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <!-- Bouton burger pour mobile -->
+    <button class="burger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<!-- ==========================================================
+     SECTION ACCUEIL (HERO)
+     ========================================================== -->
+<section id="accueil" class="hero">
+  <div class="conteneur hero-contenu">
+    <div class="reveal reveal-gauche">
+      <div class="badge">Disponible pour de nouveaux dossiers</div>
+      <h1>8 ans de <span>procédures JAF vécus</span>  mise au service dans ton dossier</h1>
+      <p>Assistance administrative spécialisée dans les affaires familiales.</p>
+      <div class="hero-boutons">
+        <a href="#contact" class="btn btn-primaire"><i class="fa-solid fa-rocket"></i> Démarrer un dossier</a>
+        <a href="#portfolio" class="btn btn-contour">Voir mes réalisations</a>
+      </div>
+    </div>
+
+    <!-- Image principale : remplace l'URL par ta propre image -->
+    <div class="hero-image reveal reveal-droite">
+      <img src="https://imgs.search.brave.com/flyOx8Ey4a_f89TvsC0Ke0d5FVjrnfm3cxL4FFjZTHU/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTI4/NzU0NjU0Ni9mci9w/aG90by9saG9tbWUt/ZGFmZmFpcmVzLWV0/LWxhdm9jYXQtZGlz/Y3V0ZW50LWR1LWRv/Y3VtZW50LWNvbnRy/YWN0dWVsLXRyYWl0/JUMzJUE5LWRlLWRy/b2l0LXNpZ25lei11/bi5qcGc_cz02MTJ4/NjEyJnc9MCZrPTIw/JmM9Q1VNVWQ2X3ZK/ZTNxRFgtYVFHeGFp/Q0JVQVFMb19ZQU9m/RFhPd0Y2X0o5bz0" alt="Équipe au travail">
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================
+     SECTION SERVICES — ajoute / supprime des cartes ici
+     ========================================================== -->
+<section id="services">
+  <div class="conteneur">
+    <h2 class="titre-section reveal">Mes services</h2>
+    <p class="sous-titre-section reveal">Une assistance administrative spécialisée dans les affaires familiales.<br> Une aide les parents séparés à préparer leurs démarches.<br><br> Tri et classement des pièces du dossiers.<br> Création de la chornologie des événements.<br><br> Rédaction de courriers administratifs (déménagement, attestations, désaccords).<br><br> Structuration complète du dossier pour l'audience (sommare, numérotation).<br><br> L'ensemble de mes prestations est proposé à distance, pour vous accompagner à chaque étape de vos démarches.</b></p>
+
+    <div class="grille-cartes">
+      <!-- Carte 1 -->
+      <div class="carte reveal delai-1">
+        <div class="icone"><i class="fa-solid fa-list-check"></i></div>
+        <h3>Organisation du dossier</h3>
+        <p>Tri, classement et numérotation des pièces justificatives.</p>
+      </div>
+      <!-- Carte 2 -->
+      <div class="carte reveal delai-2">
+        <div class="icone"><i class="fa-solid fa-file-pen"></i></div>
+        <h3>Préparation des démarches</h3>
+        <p>Élaboration d’une chronologie des faits et aide à la rédaction de courriers administratifs.</p>
+      </div>
+      <!-- Carte 3 -->
+      <div class="carte reveal delai-3">
+        <div class="icone"><i class="fa-solid fa-book"></i></div>
+        <h3>Mise en forme du dossier d’audience</h3>
+        <p>Création du sommaire et structuration du dossier pour faciliter sa consultation lors de l’audience auprès du JAF.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================
+     SECTION PORTFOLIO — remplace les images et titres
+     ========================================================== -->
+<section id="portfolio">
+  <div class="conteneur">
+    <h2 class="titre-section reveal">Réalisations</h2>
+    <p class="sous-titre-section reveal">Quelques projets dont je suis fière</p>
+
+    <div class="galerie">
+      <a href="#" class="projet reveal reveal-zoom delai-1">
+        <img src="https://imgs.search.brave.com/bIAvpN9cmr5sEfq-4HViETeQOto9tcYYCGH2bRVhc6g/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly93d3cu/cXVlc3Rpb24tanVy/aWRpcXVlLmZyL3dw/LWNvbnRlbnQvdXBs/b2Fkcy8yMDI2LzA3/L2FydGljbGUtODYx/OTktMTc4MzA0Nzgx/MjQ2MS5qcGc" alt="Projet 1">
+        <div class="projet-info"><span>Accompagnement</span><h3>Aide à la préparation de dossier JAF</h3></div>
+      </a>
+      <a href="#" class="projet reveal reveal-zoom delai-2">
+        <img src="https://imgs.search.brave.com/lr-rIyUFEEKWMlA3Anp5q8k0QlGeflLwdk7bcoE6ucE/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvNjk1/MjA0MzcyL2ZyL3Bo/b3RvL2NhYmluZXQt/ZGF2b2NhdC1zdGF0/dWUtZGUtbGEtanVz/dGljZS1hdmVjLWRl/cy0lQzMlQTljaGVs/bGVzLWV0LWF2b2Nh/dC10cmF2YWlsbGFu/dC1zdXItdW4uanBn/P3M9NjEyeDYxMiZ3/PTAmaz0yMCZjPTZm/R2JycndQNWVMdDM4/b2xpNVludjUtZTBE/Y0JrY3dnbjFzRUxB/Q3dEb2c9" alt="Projet 2">
+        <div class="projet-info"><span>Courriers administratifs familiaux</span><h3>Aide à la rédaction aux affaires familiales</h3></div>
+      </a>
+      <a href="#" class="projet reveal reveal-zoom delai-3">
+        <img src="https://imgs.search.brave.com/MR97Nyh3FA2nazvr18_NT1F4VS6FC3mfSWxnxPmyXfs/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTE5/Mjg4NDg5Ni9mci9w/aG90by9tYWxlLWFu/ZC1mZW1hbGUtbGF3/eWVycy1kaXNjdXNz/aW5nLW92ZXItZG9j/dW1lbnQtYXQtY29u/ZmVyZW5jZS10YWJs/ZS1pbi1tZWV0aW5n/LmpwZz9zPTYxMng2/MTImdz0wJms9MjAm/Yz1NUFhtbEh5V25i/TUVOU0VTZkpxM3ZC/TjJQZ0JnNjBuLXF4/RUtEaDE1aVNzPQ" alt="Projet 3">
+        <div class="projet-info"><span>Présentation aux audiences et enquêtes sociales</span><h3>Aide à organiser les événements et à se préparer aux échanges</h3></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================
+     SECTION À PROPOS + STATISTIQUES
+     data-cible = nombre final affiché après l'animation
+     ========================================================== -->
+<section id="apropos">
+  <div class="conteneur apropos">
+    <div class="reveal reveal-gauche">
+      <img src="https://imgs.search.brave.com/wAv37CM4Kt7ShtgG6xTe3hQwY7iazQl2JPRUspCkgik/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTQ5/OTQwMTU2NC9mci9w/aG90by9kZXV4LWF2/b2NhdHMtZGlzY3V0/ZW50LWR1LWRvY3Vt/ZW50LWNvbnRyYWN0/dWVsLWRlLWxhLWQl/QzMlQTl0ZXJtaW5h/dGlvbi1kZXMtcXVl/c3Rpb25zLWp1cmlk/aXF1ZXMuanBnP3M9/NjEyeDYxMiZ3PTAm/az0yMCZjPTJzcmVM/OWZtVDVSN2Y1Sk5h/aXloaEp4X1A3cF91/QnJNS0dtM0c4dDhQ/aE09" alt="Notre équipe">
+    </div>
+    <div class="reveal reveal-droite">
+      <h2 class="titre-section">À propos de moi</h2>
+      <p style="color: var(--couleur-texte-2);"> J'ai passé <b>8 ans</b> au cœur des <b>procédures du Juge aux Affaires Familliales.</b><br><br> Cette expérience m'a appris une chose : <b>derrière chaque dossier, il y a une personne souvent perdue dans des démarches complexes.</b><br><br> Aujourd'hui, je mets mon savoir-faire au service des particuliers qui doivent constituer un dossier auprès du JAF.<br><br>Mon rôle : <b>apporter des méthodes, clarté et sérénité à un moment souvent chargé émotionnellement.</b><br><br>Ce qui le caractérise : <b>la rigueur, minutieuse,, l'organisation et à l'écoute de mes clients</b><br><br> Mon objectif : <b>que vous arriviez avec un dossier complet, bien présenté, sans y passer vos nuits.</b> </p>
+
+      <div class="stats">
+        <div class="stat"><div class="nombre" data-cible="5">0</div><p>Projets livrés</p></div>
+        <div class="stat"><div class="nombre" data-cible="98">0</div><p>% clients satisfaits</p></div>
+        <div class="stat"><div class="nombre" data-cible="8">0</div><p>Années d'expérience</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================
+     SECTION CONTACT — modifie email, téléphone, adresse, réseaux
+     ========================================================== -->
+<section id="contact">
+  <div class="conteneur">
+    <h2 class="titre-section reveal">Contactez-nous</h2>
+    <p class="sous-titre-section reveal">Un dossier en cours ? Parlons-en.</p>
+
+    <div class="contact">
+      <!-- Informations de contact -->
+      <div class="infos-contact reveal reveal-gauche">
+        <p><i class="fa-solid fa-envelope"></i> virginiediazmarques@gmail.com</p>
+
+        <!-- Réseaux sociaux : change les href -->
+        <div class="reseaux">
+          <a href="https://instagram.com" target="_blank" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://linkedin.com" target="_blank" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="https://www.tiktok.com/@virginie.courriers" target="_blank" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+        </div>
+      </div>
+
+      <!-- Formulaire : les messages arrivent par e-mail grâce à FormSubmit (gratuit, sans serveur).
+           L'adresse qui reçoit les messages est celle de l'attribut "action" ci-dessous.
+           Après l'activation, FormSubmit t'envoie un code aléatoire : tu peux le mettre à la place
+           de l'adresse (action="https://formsubmit.co/TON_CODE") pour la cacher aux robots. -->
+      <form class="formulaire reveal reveal-droite" id="formulaire-contact" action="https://formsubmit.co/virginiediazmarques@gmail.com" method="POST">
+        <input type="text" name="nom" placeholder="Votre nom" required>
+        <input type="email" name="email" placeholder="Votre email" required>
+        <textarea name="message" placeholder="Votre message" required></textarea>
+
+        <!-- Réglages FormSubmit (à ne pas supprimer) -->
+        <input type="hidden" name="_subject" value="Nouveau message depuis le site Virginie Courriers">
+        <input type="hidden" name="_template" value="table">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off"> <!-- anti-spam : doit rester vide -->
+
+        <button type="submit" class="btn btn-primaire"><i class="fa-solid fa-paper-plane"></i> Envoyer</button>
+        <p id="retour-formulaire" aria-live="polite" hidden style="margin:0;"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================
+     FOOTER
+     ========================================================== -->
+<footer>
+  <div class="conteneur">
+    <div class="reseaux">
+      <a href="https://instagram.com" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+      <a href="https://linkedin.com" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a>
+      <a href="https://www.tiktok.com/@virginie.courriers" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
+    </div>
+    <p>© <span id="annee"></span> Virginie Courriers — Tous droits réservés.</p>
+  </div>
+</footer>
+
+<!-- Bouton retour en haut -->
+<button id="retour-haut" aria-label="Retour en haut"><i class="fa-solid fa-arrow-up"></i></button>
+
+
+<!-- ==========================================================
+     JAVASCRIPT — toute la logique des animations
+     ========================================================== -->
+<script>
+/* ---------- 1. ANIMATIONS AU SCROLL (molette PC / swipe mobile) ----------
+   IntersectionObserver détecte quand un élément .reveal entre dans l'écran
+   et lui ajoute la classe .visible (qui déclenche la transition CSS).
+   Fonctionne aussi bien à la molette qu'au swipe tactile. */
+const observateur = new IntersectionObserver((entrees) => {
+  entrees.forEach(entree => {
+    if (entree.isIntersecting) {
+      entree.target.classList.add('visible');
+      // Décommente la ligne suivante si tu veux que l'animation ne joue qu'UNE fois :
+      // observateur.unobserve(entree.target);
+    } else {
+      // Retire la classe pour rejouer l'animation quand on remonte
+      entree.target.classList.remove('visible');
+    }
+  });
+}, { threshold: 0.15 }); // 15 % de l'élément visible suffit à déclencher
+
+document.querySelectorAll('.reveal').forEach(el => observateur.observe(el));
+
+
+/* ---------- 2. HEADER QUI CHANGE AU SCROLL + BARRE DE PROGRESSION + RETOUR EN HAUT ---------- */
+const header = document.querySelector('header');
+const barre = document.getElementById('barre-progression');
+const btnHaut = document.getElementById('retour-haut');
+
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+
+  // Header compact après 50px de scroll
+  header.classList.toggle('scrolle', scrollY > 50);
+
+  // Barre de progression : pourcentage de la page parcourue
+  const hauteurTotale = document.documentElement.scrollHeight - window.innerHeight;
+  barre.style.width = (scrollY / hauteurTotale) * 100 + '%';
+
+  // Bouton retour en haut visible après 400px
+  btnHaut.classList.toggle('visible', scrollY > 400);
+});
+
+btnHaut.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+
+/* ---------- 3. EFFET PARALLAXE sur les blobs du fond ----------
+   Les blobs bougent légèrement avec le scroll pour donner de la profondeur. */
+const blobs = document.querySelectorAll('.blob');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  blobs.forEach((blob, i) => {
+    const vitesse = (i + 1) * 0.05; // Chaque blob bouge à une vitesse différente
+    blob.style.marginTop = (y * vitesse) + 'px';
+  });
+});
+
+
+/* ---------- 4. MENU BURGER (mobile) ---------- */
+const burger = document.querySelector('.burger');
+const menu = document.querySelector('.menu');
+
+burger.addEventListener('click', () => {
+  burger.classList.toggle('actif');
+  menu.classList.toggle('ouvert');
+});
+// Ferme le menu quand on clique sur un lien
+menu.querySelectorAll('a').forEach(lien => {
+  lien.addEventListener('click', () => {
+    burger.classList.remove('actif');
+    menu.classList.remove('ouvert');
+  });
+});
+
+
+/* ---------- 5. COMPTEURS ANIMÉS (statistiques) ----------
+   Les chiffres montent de 0 jusqu'à data-cible quand la section est visible. */
+const compteurs = document.querySelectorAll('.nombre');
+const observateurStats = new IntersectionObserver((entrees) => {
+  entrees.forEach(entree => {
+    if (!entree.isIntersecting) return;
+    const el = entree.target;
+    const cible = +el.dataset.cible;
+    const duree = 1800; // Durée de l'animation en ms
+    const debut = performance.now();
+
+    const animer = (maintenant) => {
+      const progression = Math.min((maintenant - debut) / duree, 1);
+      // Easing "ease-out" pour ralentir à la fin
+      const ease = 1 - Math.pow(1 - progression, 3);
+      el.textContent = Math.floor(ease * cible);
+      if (progression < 1) requestAnimationFrame(animer);
+    };
+    requestAnimationFrame(animer);
+    observateurStats.unobserve(el); // Ne joue qu'une fois
+  });
+}, { threshold: 0.5 });
+compteurs.forEach(c => observateurStats.observe(c));
+
+
+/* ---------- 6. CURSEUR PERSONNALISÉ (PC uniquement) ---------- */
+const curseur = document.querySelector('.curseur');
+document.addEventListener('mousemove', e => {
+  curseur.style.left = e.clientX + 'px';
+  curseur.style.top = e.clientY + 'px';
+});
+// Le curseur grossit au survol des éléments cliquables
+document.querySelectorAll('a, button, .carte, .projet').forEach(el => {
+  el.addEventListener('mouseenter', () => curseur.classList.add('grand'));
+  el.addEventListener('mouseleave', () => curseur.classList.remove('grand'));
+});
+
+
+/* ---------- 7. EFFET 3D "TILT" sur les cartes (suit la souris) ---------- */
+document.querySelectorAll('.carte').forEach(carte => {
+  carte.addEventListener('mousemove', e => {
+    const rect = carte.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;  // -0.5 à 0.5
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    carte.style.transform = `translateY(-10px) rotateX(${-y * 10}deg) rotateY(${x * 10}deg)`;
+  });
+  carte.addEventListener('mouseleave', () => { carte.style.transform = ''; });
+});
+
+
+/* ---------- 8. FORMULAIRE DE CONTACT ----------
+   Envoie le message par e-mail via FormSubmit (https://formsubmit.co), sans quitter la page.
+   L'adresse de réception est celle de l'attribut "action" du formulaire (section Contact en HTML). */
+const formulaire = document.getElementById('formulaire-contact');
+const retourFormulaire = document.getElementById('retour-formulaire');
+
+formulaire.addEventListener('submit', async e => {
+  e.preventDefault();
+
+  const bouton = formulaire.querySelector('button[type="submit"]');
+  const contenuBouton = bouton.innerHTML;
+  bouton.disabled = true;
+  bouton.textContent = 'Envoi en cours...';
+  retourFormulaire.hidden = true;
+
+  // Même adresse que "action", en version AJAX (envoi sans recharger la page)
+  const urlEnvoi = formulaire.getAttribute('action').replace('https://formsubmit.co/', 'https://formsubmit.co/ajax/');
+
+  try {
+    const reponse = await fetch(urlEnvoi, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(Object.fromEntries(new FormData(formulaire)))
+    });
+    const data = await reponse.json();
+
+    if (data.success === 'true' || data.success === true) {
+      retourFormulaire.textContent = 'Merci ! Votre message a bien été envoyé.';
+      formulaire.reset();
+    } else {
+      throw new Error(data.message || 'Envoi refusé');
+    }
+  } catch (erreur) {
+    console.error('Erreur du formulaire :', erreur);
+    retourFormulaire.textContent = "Une erreur est survenue, le message n'a pas pu être envoyé. Vous pouvez nous écrire directement à virginiediazmarques@gmail.com.";
+  }
+
+  retourFormulaire.hidden = false;
+  bouton.innerHTML = contenuBouton;
+  bouton.disabled = false;
+});
+
+
+/* ---------- 9. ANNÉE AUTOMATIQUE dans le footer ---------- */
+document.getElementById('annee').textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>
